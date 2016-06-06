@@ -14,6 +14,8 @@ import theano
 
 import ale_experiment
 import ale_agent
+import ale_data_set
+import sar_parser
 import q_network
 
 def process_args(args, defaults, description):
@@ -138,6 +140,17 @@ def process_args(args, defaults, description):
                         type=bool, default=defaults.CUDNN_DETERMINISTIC,
                         help=('Whether to use deterministic backprop. ' +
                               '(default: %(default)s)'))
+    parser.add_argument('--screenshot_dir', dest='screenshot_dir',
+                        type=str, default=defaults.SCREENSHOT_DIR)
+    parser.add_argument('--rewards_file', dest='rewards_file',
+                        type=str, default=defaults.REWARDS_FILE)
+    parser.add_argument('--screenshot_width', dest='screenshot_width',
+                        type=int, default=defaults.SCREENSHOT_WIDTH)
+    parser.add_argument('--screenshot_height', dest='screenshot_height',
+                        type=int, default=defaults.SCREENSHOT_HEIGHT)
+    parser.add_argument('--screenshot_grayscale', dest='screenshot_grayscale',
+                        type=bool, default=defaults.SCREENSHOT_GRAYSCALE)
+
 
     parameters = parser.parse_args(args)
     if parameters.experiment_prefix is None:
@@ -161,7 +174,6 @@ def process_args(args, defaults, description):
                                       parameters.update_frequency)
 
     return parameters
-
 
 
 def launch(args, defaults, description):
@@ -225,7 +237,21 @@ def launch(args, defaults, description):
         handle = open(parameters.nn_file, 'r')
         network = cPickle.load(handle)
 
+    data_set = ale_data_set.DataSet(width=defaults.RESIZED_WIDTH,
+                                    height=defaults.RESIZED_HEIGHT,
+                                    rng=rng,
+                                    max_steps=parameters.replay_memory_size,
+                                    phi_length=parameters.phi_length)
+    if parameters.screenshot_dir is not None and parameters.rewards_file is not None:
+        parser = sar_parser.SARParser(data_set,
+                                      parameters.resize_method,
+                                      parameters.screenshot_width,
+                                      parameters.screenshot_height,
+                                      parameters.screenshot_grayscale)
+        data_set = parser.importSARs(parameters.screenshot_dir, parameters.rewards_file)
+
     agent = ale_agent.NeuralAgent(network,
+                                  data_set,
                                   parameters.epsilon_start,
                                   parameters.epsilon_min,
                                   parameters.epsilon_decay,

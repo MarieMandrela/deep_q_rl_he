@@ -20,7 +20,7 @@ sys.setrecursionlimit(10000)
 
 class NeuralAgent(object):
 
-    def __init__(self, q_network, epsilon_start, epsilon_min,
+    def __init__(self, q_network, data_set, epsilon_start, epsilon_min,
                  epsilon_decay, replay_memory_size, exp_pref,
                  replay_start_size, update_frequency, rng):
 
@@ -52,11 +52,7 @@ class NeuralAgent(object):
         self.num_actions = self.network.num_actions
 
 
-        self.data_set = ale_data_set.DataSet(width=self.image_width,
-                                             height=self.image_height,
-                                             rng=rng,
-                                             max_steps=self.replay_memory_size,
-                                             phi_length=self.phi_length)
+        self.data_set = data_set
 
         # just needs to be big enough to create phi's
         self.test_data_set = ale_data_set.DataSet(width=self.image_width,
