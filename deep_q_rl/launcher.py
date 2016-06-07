@@ -248,7 +248,7 @@ def launch(args, defaults, description):
                                       parameters.screenshot_width,
                                       parameters.screenshot_height,
                                       parameters.screenshot_grayscale)
-        data_set = parser.importSARs(parameters.screenshot_dir, parameters.rewards_file)
+        data_set = parser.importEpisode(parameters.screenshot_dir, parameters.rewards_file)
 
     agent = ale_agent.NeuralAgent(network,
                                   data_set,

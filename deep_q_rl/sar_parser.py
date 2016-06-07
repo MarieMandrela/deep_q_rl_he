@@ -29,7 +29,7 @@ class SARParser:
 
         self.data_set = data_set
 
-    def importSARs(self, screenshot_path, rewards_file):
+    def importEpisode(self, screenshot_path, rewards_file):
 
         screenshot_names = glob.glob1(screenshot_path,"*.png")
         screenshot_num = len(screenshot_names)
@@ -50,7 +50,7 @@ class SARParser:
             observation = self.get_observation()
             action = action_rewards[i][0]
             reward = action_rewards[i+1][1]
-            self.data_set.add_sample(observation, action, reward, False)
+            self.data_set.add_sample(observation, action, reward, True if i == screenshot_num - 2 else False)
 
         return self.data_set
 
