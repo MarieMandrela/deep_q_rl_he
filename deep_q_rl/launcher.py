@@ -142,8 +142,8 @@ def process_args(args, defaults, description):
                               '(default: %(default)s)'))
     parser.add_argument('--screenshot_dir', dest='screenshot_dir',
                         type=str, default=defaults.SCREENSHOT_DIR)
-    parser.add_argument('--rewards_file', dest='rewards_file',
-                        type=str, default=defaults.REWARDS_FILE)
+    parser.add_argument('--rewards_dir', dest='rewards_dir',
+                        type=str, default=defaults.REWARDS_DIR)
     parser.add_argument('--screenshot_width', dest='screenshot_width',
                         type=int, default=defaults.SCREENSHOT_WIDTH)
     parser.add_argument('--screenshot_height', dest='screenshot_height',
@@ -242,13 +242,13 @@ def launch(args, defaults, description):
                                     rng=rng,
                                     max_steps=parameters.replay_memory_size,
                                     phi_length=parameters.phi_length)
-    if parameters.screenshot_dir is not None and parameters.rewards_file is not None:
+    if parameters.screenshot_dir is not None and parameters.rewards_dir is not None:
         parser = sar_parser.SARParser(data_set,
                                       parameters.resize_method,
                                       parameters.screenshot_width,
                                       parameters.screenshot_height,
                                       parameters.screenshot_grayscale)
-        data_set = parser.importEpisode(parameters.screenshot_dir, parameters.rewards_file)
+        data_set = parser.import_episodes(parameters.screenshot_dir, parameters.rewards_dir)
 
     agent = ale_agent.NeuralAgent(network,
                                   data_set,

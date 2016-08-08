@@ -31,7 +31,7 @@ class Defaults:
     # Import Parameters
     # ----------------------
     SCREENSHOT_DIR = "../screenshots/"
-    REWARDS_FILE = "../rewards/rewards.csv"
+    REWARDS_DIR = "../rewards/"
     SCREENSHOT_WIDTH = 160
     SCREENSHOT_HEIGHT = 210
     SCREENSHOT_GRAYSCALE = True
