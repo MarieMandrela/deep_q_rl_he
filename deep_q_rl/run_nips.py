@@ -28,6 +28,15 @@ class Defaults:
     REPEAT_ACTION_PROBABILITY = 0
 
     # ----------------------
+    # Import Parameters
+    # ----------------------
+    SCREENSHOT_DIR = None
+    REWARDS_DIR = None
+    SCREENSHOT_WIDTH = 0
+    SCREENSHOT_HEIGHT = 0
+    SCREENSHOT_GRAYSCALE = False
+
+    # ----------------------
     # Agent/Network parameters:
     # ----------------------
     UPDATE_RULE = 'rmsprop'
