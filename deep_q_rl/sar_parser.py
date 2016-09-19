@@ -12,7 +12,7 @@ CROP_OFFSET = 8
 
 class SARParser:
 
-    def __init__(self, data_set, resize_method, width, height, gray_scale):
+    def __init__(self, data_set, min_action_set, resize_method, width, height, gray_scale):
         self.gray_scale = gray_scale
 
         self.width = width
@@ -29,6 +29,8 @@ class SARParser:
                                       dtype=np.uint8)
 
         self.data_set = data_set
+
+        self.min_action_set = min_action_set
 
     @staticmethod
     def get_immediate_subdirectories(a_dir):
@@ -62,7 +64,8 @@ class SARParser:
         for i in xrange(1, screenshot_num - 1):
             self.import_screen(screenshot_dir + '/' + screenshot_names[i])
             observation = self.get_observation()
-            action = action_rewards[i][0]
+            min_action = np.where(self.min_action_set == action_rewards[i][0])[0][0]
+            action = min_action
             reward = action_rewards[i+1][1]
             self.data_set.add_sample(observation, action, reward, True if i == screenshot_num - 2 else False)
 

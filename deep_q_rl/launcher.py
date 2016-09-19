@@ -214,6 +214,8 @@ def launch(args, defaults, description):
 
     ale.loadROM(full_rom_path)
 
+    min_action_set = ale.getMinimalActionSet()
+
     num_actions = len(ale.getMinimalActionSet())
 
     if parameters.nn_file is None:
@@ -244,6 +246,7 @@ def launch(args, defaults, description):
                                     phi_length=parameters.phi_length)
     if parameters.screenshot_dir is not None and parameters.rewards_dir is not None:
         parser = sar_parser.SARParser(data_set,
+                                      min_action_set,
                                       parameters.resize_method,
                                       parameters.screenshot_width,
                                       parameters.screenshot_height,
