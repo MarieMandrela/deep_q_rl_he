@@ -82,7 +82,6 @@ class DeepQLearner:
         self.terminals_shared = theano.shared(
             np.zeros((batch_size, 1), dtype='int32'),
             broadcastable=(False, True))
-
         q_vals = lasagne.layers.get_output(self.l_out, states / input_scale)
         
         if self.freeze_interval > 0:

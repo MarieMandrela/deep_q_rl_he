@@ -67,6 +67,7 @@ class SARParser:
             min_action = np.where(self.min_action_set == action_rewards[i][0])[0][0]
             action = min_action
             reward = action_rewards[i+1][1]
+            reward = np.clip(reward, -1, 1)
             self.data_set.add_sample(observation, action, reward, True if i == screenshot_num - 2 else False)
 
         return self.data_set
