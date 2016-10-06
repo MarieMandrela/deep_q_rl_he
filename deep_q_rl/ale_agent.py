@@ -71,6 +71,7 @@ class NeuralAgent(object):
 
         self._open_results_file()
         self._open_learning_file()
+        self._open_memory_file()
 
         self.episode_counter = 0
         self.batch_counter = 0
@@ -95,6 +96,11 @@ class NeuralAgent(object):
         self.learning_file.write('mean_loss,epsilon\n')
         self.learning_file.flush()
 
+    def _open_memory_file(self):
+        self.memory_file = open(self.exp_dir + '/memory.csv', 'w', 0)
+        self.memory_file.write('episode,memory_size\n')
+        self.memory_file.flush()
+
     def _update_results_file(self, epoch, num_episodes, holdout_sum):
         out = "{},{},{},{},{}\n".format(epoch, num_episodes, self.total_reward,
                                         self.total_reward / float(num_episodes),
@@ -107,6 +113,11 @@ class NeuralAgent(object):
                                self.epsilon)
         self.learning_file.write(out)
         self.learning_file.flush()
+
+    def _update_memory_file(self, episode, memory_size):
+        out = "{},{}\n".format(episode, memory_size)
+        self.memory_file.write(out)
+        self.memory_file.flush()
 
     def start_episode(self, observation):
         """
@@ -256,6 +267,8 @@ class NeuralAgent(object):
                                      np.clip(reward, -1, 1),
                                      True)
 
+
+
             logging.info("steps/second: {:.2f}".format(\
                             self.step_counter/total_time))
 
@@ -263,6 +276,8 @@ class NeuralAgent(object):
                 self._update_learning_file()
                 logging.info("average loss: {:.4f}".format(\
                                 np.mean(self.loss_averages)))
+
+        self._update_memory_file(self.episode_counter, self.data_set.size)
 
 
     def finish_epoch(self, epoch):
