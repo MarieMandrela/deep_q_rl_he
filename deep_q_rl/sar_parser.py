@@ -114,7 +114,7 @@ class SARParser:
             crop_y_cutoff + self.resized_height, :]
 
             return cropped
-        elif self.resize_method == 'crop':
+        elif self.resize_method == 'scale':
             return cv2.resize(image,
                               (self.resized_width, self.resized_height),
                               interpolation=cv2.INTER_LINEAR)
